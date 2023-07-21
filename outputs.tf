@@ -1,12 +1,16 @@
 output "vpc_id" {
-  value = module.vpc.vpc_id
+  sensitive = false
+  value     = module.vpc.vpc_id
 }
 output "database_subnet_group" {
-  value = module.vpc.database_subnet_group
+  sensitive = false
+  value     = module.vpc.database_subnet_group
 }
 output "mysql_sg" {
-  value = aws_security_group.mysql-sg.id
+  sensitive = false
+  value     = aws_security_group.mysql-sg.id
 }
 output "rds" {
-  value = module.db
+  sensitive = false
+  value     = module.db
 }
