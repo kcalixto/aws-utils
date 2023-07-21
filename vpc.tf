@@ -82,13 +82,13 @@ locals {
 #############################################################
 # Data sources to get VPC and default security group details
 #############################################################
-data "aws_vpc" "default" {
+data "aws_vpc" "vpc" {
   default = true
 }
 
-data "aws_security_group" "default" {
+data "aws_security_group" "mysql-sg" {
   name   = "mysql-sg"
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = data.aws_vpc.vpc.id
 }
 
 #############################################################
@@ -127,7 +127,7 @@ module "mysql-sg" {
   source     = "terraform-aws-modules/security-group/aws"
   depends_on = [module.vpc]
 
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = data.aws_vpc.vpc.id
 
   # ingress
   ingress_with_cidr_blocks = [
