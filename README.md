@@ -1,2 +1,1 @@
-![aws](https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/2560px-Amazon_Web_Services_Logo.svg.png)
-![terraform](https://blogs.vmware.com/cloudprovider/files/2019/04/og-image-8b3e4f7d-blog-aspect-ratio.png)
+![aws](https://cdn.iconscout.com/icon/free/png-256/free-amazon-aws-3550503-2970088.png) ![terraform](https://gitlab.com/uploads/-/system/project/avatar/17143493/terraform.png)
