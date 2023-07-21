@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "${var.region}"
+  region = "sa-east-1"
 }
 
 locals {

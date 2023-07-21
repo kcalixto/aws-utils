@@ -1,7 +1,3 @@
-variable "region" {
-  description = "AWS region"
-}
-
 variable "mysql_db_user" {
   description = "Database username"
 }
