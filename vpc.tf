@@ -99,17 +99,17 @@ module "vpc" {
 
   create_database_subnet_group = true
 
-  tags  = local.tags
+  tags = local.tags
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = module.vpc.vpc_id
 
-  tags  = local.tags
+  tags = local.tags
 }
 
-resource "aws_security_group" "rds_sg" {
-  name   = "rds_sg"
+resource "aws_security_group" "mysql-sg" {
+  name   = "mysql-sg"
   vpc_id = module.vpc.vpc_id
 
   ingress {
