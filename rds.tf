@@ -1,6 +1,5 @@
 module "db" {
-  source     = "terraform-aws-modules/rds/aws"
-  depends_on = [module.vpc, module.mysql-sg]
+  source = "terraform-aws-modules/rds/aws"
 
   identifier = "demo"
 
@@ -17,12 +16,10 @@ module "db" {
   username = "admin"
   port     = 3306
 
-  multi_az             = true
-  db_subnet_group_name = module.vpc[0].database_subnet_group
-  vpc_security_group_ids = tolist([
-    for sg in module.mysql-sg : sg.security_group_id
-  ])
-  
+  multi_az               = true
+  db_subnet_group_name   = module.vpc.database_subnet_group
+  vpc_security_group_ids = module.mysql-sg.security_group_id
+
   deletion_protection = false
 
   tags  = local.tags

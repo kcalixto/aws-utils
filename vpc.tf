@@ -80,18 +80,6 @@ locals {
 }
 
 #############################################################
-# Data sources to get VPC and default security group details
-#############################################################
-data "aws_vpc" "vpc" {
-  default = true
-}
-
-data "aws_security_group" "mysql-sg" {
-  name   = "mysql-sg"
-  vpc_id = data.aws_vpc.vpc.id
-}
-
-#############################################################
 # RESOURCES
 #############################################################
 module "vpc" {
@@ -116,29 +104,28 @@ module "vpc" {
 }
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id     = module.vpc[0].vpc_id
-  depends_on = [module.vpc]
+  vpc_id = module.vpc.vpc_id
 
   tags  = local.tags
   count = local.deploy_vpc ? 1 : 0
 }
 
-module "mysql-sg" {
-  source     = "terraform-aws-modules/security-group/aws"
-  depends_on = [module.vpc]
+resource "aws_security_group" "rds_sg" {
+  name   = "rds_sg"
+  vpc_id = module.vpc.vpc_id
 
-  vpc_id = data.aws_vpc.vpc.id
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-  # ingress
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 3306
-      to_port     = 3306
-      protocol    = "tcp"
-      description = "MySQL access from within VPC"
-    },
-  ]
-
-  tags  = local.tags
-  count = local.deploy_mysql_sg ? 1 : 0
+  tags = local.tags
 }
