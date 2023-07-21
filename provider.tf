@@ -1,10 +1,9 @@
 provider "aws" {
-  region = locals.region
+  region = "sa-east-1"
 }
 
 locals {
   name   = "utils"
-  region = "sa-east-1"
 
   tags = {
     GithubRepo = "aws-utils"
