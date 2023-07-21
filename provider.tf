@@ -6,6 +6,6 @@ locals {
   name = "utils"
 
   tags = {
-    GithubRepo = "aws-utils"
+    GithubRepo = "github.com/kcalixto/aws-utils"
   }
 }
