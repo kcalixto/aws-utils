@@ -10,8 +10,6 @@ env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "aws-utils"
   CONFIG_DIRECTORY: "."
-  TF_VAR_mysql_db_user: "${{ secrets.MYSQL_DB_USERNAME }}"
-  TF_VAR_mysql_db_pass: "${{ secrets.MYSQL_DB_PASSWORD }}"
 
 jobs:
   terraform:
