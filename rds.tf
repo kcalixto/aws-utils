@@ -1,5 +1,6 @@
 module "db" {
-  source = "terraform-aws-modules/rds/aws"
+  source     = "terraform-aws-modules/rds/aws"
+  depends_on = [module.vpc, module.mysql-sg]
 
   identifier = "demo"
 
@@ -22,6 +23,6 @@ module "db" {
 
   deletion_protection = false
 
-  tags   = local.tags
+  tags  = local.tags
   count = local.deploy_rds ? 1 : 0
 }

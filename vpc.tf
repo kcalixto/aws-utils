@@ -94,7 +94,6 @@ module "vpc" {
   public_inbound_acl_rules     = local.network_acls["public_inbound"]
   public_outbound_acl_rules    = local.network_acls["public_outbound"]
 
-  database_subnet_names        = ["mysql_db_subnet"]
   create_database_subnet_group = true
 
   tags  = local.tags
