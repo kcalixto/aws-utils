@@ -18,7 +18,7 @@ module "db" {
   port     = 3306
 
   multi_az               = true
-  db_subnet_group_name   = module.vpc.database_subnet_group
+  db_subnet_group_name   = module.vpc[0].database_subnet_group
   vpc_security_group_ids = [module.mysql-sg.security_group_id]
 
   deletion_protection = false
