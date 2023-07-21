@@ -100,14 +100,12 @@ module "vpc" {
   create_database_subnet_group = true
 
   tags  = local.tags
-  count = local.deploy_vpc ? 1 : 0
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = module.vpc.vpc_id
 
   tags  = local.tags
-  count = local.deploy_vpc ? 1 : 0
 }
 
 resource "aws_security_group" "rds_sg" {
