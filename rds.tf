@@ -23,5 +23,5 @@ module "db" {
   deletion_protection = false
 
   tags   = local.tags
-  deploy = local.deploy_rds
+  count = local.deploy_rds ? 1 : 0
 }

@@ -97,13 +97,13 @@ module "vpc" {
   database_subnet_names        = ["mysql_db_subnet"]
   create_database_subnet_group = true
 
-  tags   = local.tags
-  deploy = local.deploy_vpc
+  tags  = local.tags
+  count = local.deploy_vpc ? 1 : 0
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = module.vpc.vpc_id
 
-  tags   = local.tags
-  deploy = local.deploy_vpc
+  tags  = local.tags
+  count = local.deploy_vpc ? 1 : 0
 }

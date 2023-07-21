@@ -16,5 +16,5 @@ module "mysql-sg" {
   ]
 
   tags   = local.tags
-  deploy = local.deploy_mysql_sg
+  count = local.deploy_mysql_sg ? 1 : 0
 }
