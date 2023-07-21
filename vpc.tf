@@ -116,7 +116,7 @@ module "vpc" {
 }
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id     = module.vpc.vpc_id
+  vpc_id     = module.vpc[0].vpc_id
   depends_on = [module.vpc]
 
   tags  = local.tags
