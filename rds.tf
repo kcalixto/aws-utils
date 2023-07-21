@@ -18,7 +18,7 @@ module "db" {
 
   multi_az               = true
   db_subnet_group_name   = module.vpc.database_subnet_group
-  vpc_security_group_ids = [aws_security_group.mysql-sg.security_group_id]
+  vpc_security_group_ids = [aws_security_group.mysql-sg.id]
 
   deletion_protection = false
 
