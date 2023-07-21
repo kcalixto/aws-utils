@@ -123,7 +123,8 @@ resource "aws_internet_gateway" "gw" {
 }
 
 module "mysql-sg" {
-  source = "terraform-aws-modules/security-group/aws"
+  source     = "terraform-aws-modules/security-group/aws"
+  depends_on = [module.vpc]
 
   vpc_id = data.aws_vpc.default.id
 
@@ -134,7 +135,6 @@ module "mysql-sg" {
       to_port     = 3306
       protocol    = "tcp"
       description = "MySQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
     },
   ]
 
