@@ -1,11 +1,11 @@
 provider "aws" {
-  region = "sa-east-1"
+  region = "${var.region}"
 }
 
 locals {
   name = "utils"
 
   tags = {
-    GithubRepo = "aws-utils"
+    GithubRepo = "github.com/kcalixto/aws-utils"
   }
 }
