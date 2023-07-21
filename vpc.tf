@@ -79,6 +79,21 @@ locals {
   }
 }
 
+#############################################################
+# Data sources to get VPC and default security group details
+#############################################################
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_security_group" "default" {
+  name   = "mysql-sg"
+  vpc_id = data.aws_vpc.default.id
+}
+
+#############################################################
+# RESOURCES
+#############################################################
 module "vpc" {
   name   = "${local.name}-general-vpc"
   source = "terraform-aws-modules/vpc/aws"
@@ -105,4 +120,24 @@ resource "aws_internet_gateway" "gw" {
 
   tags  = local.tags
   count = local.deploy_vpc ? 1 : 0
+}
+
+module "mysql-sg" {
+  source = "terraform-aws-modules/security-group/aws"
+
+  vpc_id = data.aws_vpc.default.id
+
+  # ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 3306
+      to_port     = 3306
+      protocol    = "tcp"
+      description = "MySQL access from within VPC"
+      cidr_blocks = module.vpc.vpc_cidr_block
+    },
+  ]
+
+  tags  = local.tags
+  count = local.deploy_mysql_sg ? 1 : 0
 }
