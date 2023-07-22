@@ -12,16 +12,19 @@ module "db" {
   allocated_storage     = 20
   max_allocated_storage = 20
 
-  db_name  = "mysqldb"
-  username = "admin"
-  port     = 3306
+  db_name = "mysqldb"
+  port    = 3306
 
   multi_az               = true
   db_subnet_group_name   = module.vpc.database_subnet_group
   vpc_security_group_ids = [aws_security_group.mysql-sg.id]
 
-  deletion_protection = false
-  storage_encrypted = false
+  deletion_protection         = false
+  storage_encrypted           = false
+  manage_master_user_password = true
 
-  tags  = local.tags
+  username = var.mysql_db_user
+  password = var.mysql_db_pass
+
+  tags = local.tags
 }
