@@ -12,7 +12,7 @@ module "db" {
   allocated_storage     = 20
   max_allocated_storage = 20
 
-  db_name  = "mysql-db"
+  db_name  = "mysqldb"
   username = "admin"
   port     = 3306
 
