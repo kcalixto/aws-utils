@@ -21,6 +21,7 @@ module "db" {
   vpc_security_group_ids = [aws_security_group.mysql-sg.id]
 
   deletion_protection = false
+  storage_encrypted = false
 
   tags  = local.tags
 }
