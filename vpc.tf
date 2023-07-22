@@ -102,11 +102,11 @@ module "vpc" {
   tags = local.tags
 }
 
-resource "aws_internet_gateway" "gw" {
-  vpc_id = module.vpc.vpc_id
+# resource "aws_internet_gateway" "gw" {
+#   vpc_id = module.vpc.vpc_id
 
-  tags = local.tags
-}
+#   tags = local.tags
+# }
 
 resource "aws_security_group" "mysql-sg" {
   name   = "mysql-sg"
