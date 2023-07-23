@@ -19,4 +19,22 @@ functions:
       - schedule: rate(10 minutes)
     # worker mode // every 1st day of the month at 1am
       # - schedule: cron(0 1 0 1 1/1 ? *)
-      
+  cancel:
+    handler: worker.cancel
+    events:
+      - http:
+          path: /cancel
+          method: get
+          cors: true
+
+resource:
+  Resources:
+    LambdaURLSSM:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: /tf-dropping-worker/lambdas-url
+        Type: String
+        Value: ${self:custom.apigateway.url}
+
+plugins:
+  - serverless-apigateway-plugin
