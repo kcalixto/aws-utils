@@ -8,5 +8,10 @@
 // [ ] notify on slack if delete fails
 
 export async function start () {
-  console.log("hi! i'm working as expected :) may i have some vacations?")
+
+export async function cancel () {
+  return {
+    body: "ok, i'll cancel my vacations :(",
+    stausCode: 200
+  }
 }
