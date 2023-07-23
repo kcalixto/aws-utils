@@ -27,7 +27,7 @@ functions:
           method: get
           cors: true
 
-resource:
+resources:
   Resources:
     LambdaURLSSM:
       Type: AWS::SSM::Parameter
