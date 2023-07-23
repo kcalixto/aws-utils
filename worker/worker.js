@@ -18,8 +18,10 @@ export async function start () {
 }
 
 export async function cancel () {
-  return {
-    body: "ok, i'll cancel my vacations :(",
-    stausCode: 200
+  const response = {
+    stausCode: 200,
+    body: "ok, i'll cancel my vacations :("
   }
+
+  return response
 }
