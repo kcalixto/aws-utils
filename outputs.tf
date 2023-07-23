@@ -14,3 +14,7 @@ output "rds" {
   sensitive = true
   value     = module.db
 }
+output "rds-address" {
+  sensitive = true
+  value     = module.db.db_instance_address
+}
