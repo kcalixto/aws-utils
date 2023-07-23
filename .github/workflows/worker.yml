@@ -1,0 +1,15 @@
+name: stack dropping worker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - worker/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+  

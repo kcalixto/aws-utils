@@ -1,0 +1,21 @@
+service: sls-aws-utils
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: worker
+  region: sa-east-1
+  memorySize: 128
+  timeout: 30
+  logRetentionInDays: 1
+
+functions:
+  dropping:
+    handler: worker.start
+    events:
+    # debug mode // every 10 minutes
+      - schedule: rate(10 minutes)
+    # worker mode // every 1st day of the month at 1am
+      # - schedule: cron(0 1 0 1 1/1 ? *)
