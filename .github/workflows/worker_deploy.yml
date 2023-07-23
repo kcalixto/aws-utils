@@ -22,6 +22,9 @@ jobs:
         run: npm ci
         working-directory: worker
 
+      - name: install eslint
+        run: npm install -g eslint
+
       - name: lint
         run: eslint .
         working-directory: worker
@@ -29,11 +32,6 @@ jobs:
       - name: install serverless
         run: npm install -g serverless
       
-      - name: install eslint
-        run: npm install -g eslint
-
-
-  
       - name: deploy
         run: sls deploy --verbose
         env:
