@@ -1,0 +1,30 @@
+name: stack dropping worker
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - worker/**
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      
+      - name: install dependencies
+        run: npm ci
+        working-directory: worker
+        
+      - name: install eslint
+        run: npm install -g eslint
+
+      - name: lint
+        run: eslint .
+        working-directory: worker

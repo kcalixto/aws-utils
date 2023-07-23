@@ -1,0 +1,39 @@
+name: stack dropping worker
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - worker/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      
+      - name: install dependencies
+        run: npm ci
+        working-directory: worker
+
+      - name: install eslint
+        run: npm install -g eslint
+
+      - name: lint
+        run: eslint .
+        working-directory: worker
+        
+      - name: install serverless
+        run: npm install -g serverless
+      
+      - name: deploy
+        run: sls deploy --verbose
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
