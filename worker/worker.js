@@ -7,6 +7,6 @@
 // [ ] notify on slack when delete is done
 // [ ] notify on slack if delete fails
 
-export async function start() {
-    console.log('started!')
+export async function start () {
+  console.log("hi! i'm working as expected :) may i have some vacations?")
 }

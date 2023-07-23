@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'tf-stack/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "aws-utils"
