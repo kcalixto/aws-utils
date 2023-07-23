@@ -9,7 +9,7 @@ env:
   TF_CLOUD_ORGANIZATION: "aws-utils"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "aws-utils"
-  CONFIG_DIRECTORY: "."
+  CONFIG_DIRECTORY: "./tf-stack"
 
 jobs:
   terraform:
