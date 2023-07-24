@@ -17,6 +17,10 @@ provider:
         - Effect: Allow
           Action:
             - ssm:GetParameter
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
           Resource: "*"
 
 functions:
@@ -27,6 +31,7 @@ functions:
       - schedule: rate(10 minutes)
     # worker mode // every 1st day of the month at 1am
       # - schedule: cron(0 1 0 1 1/1 ? *)
+
   cancel:
     handler: worker.cancel
     events:
