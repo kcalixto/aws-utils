@@ -19,9 +19,10 @@ export async function start () {
 
 export async function cancel () {
   const response = {
-    stausCode: 200,
+    statusCode: 200,
     body: "ok, i'll cancel my vacations :("
   }
 
+  console.log(response)
   return response
 }
