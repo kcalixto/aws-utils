@@ -11,6 +11,14 @@ provider:
   timeout: 30
   logRetentionInDays: 1
 
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+          Resource: "*"
+
 functions:
   worker:
     handler: worker.start
