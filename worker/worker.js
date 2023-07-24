@@ -23,5 +23,6 @@ export async function cancel () {
     body: "ok, i'll cancel my vacations :("
   }
 
+  console.log(response)
   return response
 }
