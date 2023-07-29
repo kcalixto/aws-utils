@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: test github.event_path
-        run: echo ${{github.event_path}}
+        run: echo ${{github}}
 
       - name: RDS dir check
         if: startsWith(github.event_path, 'templates/rds')
