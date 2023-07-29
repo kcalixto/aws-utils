@@ -1,17 +1,17 @@
-name: Plan RDS deploy
+name: Plan Deploy
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - 'templates/rds/**'
+      - 'templates/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "aws-utils"
   TF_API_TOKEN: "${{ secrets.TF_AWS_UTILS_TOKEN }}"
-  TF_WORKSPACE: "aws-utils-rds"
-  CONFIG_DIRECTORY: "./templates/rds"
+  TF_WORKSPACE: "null"
+  CONFIG_DIRECTORY: "null"
 
 jobs:
   terraform:
@@ -23,6 +23,18 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
+      - name: RDS dir check
+        if: startsWith(github.event_path, 'templates/rds')
+        run: |
+          echo "::set-output name=CONFIG_DIRECTORY::templates/rds"
+          echo "::set-output name=TF_WORKSPACE::aws-utils-rds"
+          
+      - name: VPC dir check
+        if: startsWith(github.event_path, 'templates/vpc')
+        run: |
+          echo "::set-output name=CONFIG_DIRECTORY::templates/vpc"
+          echo "::set-output name=TF_WORKSPACE::aws-utils-vpc"
       
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
@@ -65,7 +77,8 @@ jobs:
                 \`\`\`
                 Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
                 \`\`\`
-                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
+                
+                ![Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
                 `;
             // 3. Delete previous comment so PR timeline makes sense
             if (botComment) {
