@@ -34,11 +34,11 @@ jobs:
 
       - name: Dir Check
         run: |
-          if [[ ${{steps.get_changed.outputs.changed}} == *"templates/rds"* ]]; then
+          if [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
             echo "::set-output name=CONFIG_DIRECTORY::templates/rds"
             echo "::set-output name=TF_WORKSPACE::aws-utils-rds"
 
-          elif [[ ${{steps.get_changed.outputs.changed}} == *"templates/vpc"* ]]; then
+          elif [[ ${{steps.get_changed.outputs.changed}} == *"vpc"* ]]; then
             echo "::set-output name=CONFIG_DIRECTORY::templates/vpc"
             echo "::set-output name=TF_WORKSPACE::aws-utils-vpc"
           fi
