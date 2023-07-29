@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'templates/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "aws-utils"
