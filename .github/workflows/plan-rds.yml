@@ -11,7 +11,7 @@ env:
   TF_CLOUD_ORGANIZATION: "aws-utils-rds"
   TF_API_TOKEN: "${{ secrets.TF_AWS_UTILS_TOKEN }}"
   TF_WORKSPACE: "aws-utils-rds"
-  CONFIG_DIRECTORY: "templates/rds"
+  CONFIG_DIRECTORY: "./templates/rds"
 
 jobs:
   terraform:
