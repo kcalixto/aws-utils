@@ -11,6 +11,7 @@ module "db" {
 
   allocated_storage     = 20
   max_allocated_storage = 20
+  skip_final_snapshot = true
 
   db_name = "mysqldb"
   port    = 3306
