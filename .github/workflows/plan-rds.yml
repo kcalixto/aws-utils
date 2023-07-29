@@ -43,6 +43,11 @@ jobs:
             echo "::set-output name=TF_WORKSPACE::aws-utils-vpc"
           fi
       
+      - name: log
+        run: |
+          echo ${{ env.CONFIG_DIRECTORY }}
+          echo ${{ env.TF_WORKSPACE }}
+      
       # - name: Upload Configuration
       #   uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
       #   id: plan-upload
