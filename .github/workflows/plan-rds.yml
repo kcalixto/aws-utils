@@ -1,17 +1,17 @@
-name: TF Plan aws-utils
+name: Plan RDS deploy
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - 'tf-stack/**'
+      - 'templates/rds/**'
 
 env:
-  TF_CLOUD_ORGANIZATION: "aws-utils"
-  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "aws-utils"
-  CONFIG_DIRECTORY: "./tf-stack"
+  TF_CLOUD_ORGANIZATION: "aws-utils-rds"
+  TF_API_TOKEN: "${{ secrets.TF_AWS_UTILS_RDS_TOKEN }}"
+  TF_WORKSPACE: "aws-utils-rds"
+  CONFIG_DIRECTORY: "templates/rds"
 
 jobs:
   terraform:

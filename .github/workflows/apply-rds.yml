@@ -1,22 +1,23 @@
-name: TF Apply aws-utils
+name: Apply RDS deploy
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'tf-stack/**'
+      - 'templates/rds/**'
 
 env:
-  TF_CLOUD_ORGANIZATION: "aws-utils"
-  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "aws-utils"
-  CONFIG_DIRECTORY: "./tf-stack"
+  TF_CLOUD_ORGANIZATION: "aws-utils-rds"
+  TF_API_TOKEN: "${{ secrets.TF_AWS_UTILS_RDS_TOKEN }}"
+  TF_WORKSPACE: "aws-utils-rds"
+  CONFIG_DIRECTORY: "templates/rds"
 
 jobs:
   terraform:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
+    
     permissions:
       contents: read
     steps:
