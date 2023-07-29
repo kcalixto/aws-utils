@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'templates/**'
 
 env:
   TF_CLOUD_ORGANIZATION: "aws-utils"
@@ -24,20 +22,26 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: test toJSON(github)
-        run: echo ${{toJSON(github)}}
+      - uses: Stockopedia/action-get-changed-files@v1
+        id: get_changed
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          foldersOnly: true
+          format: newline
 
-      - name: RDS dir check
-        if: startsWith(github.event_path, 'templates/rds')
+      - name: Echo
+        run: echo ${{ steps.get_changed.outputs.changed }}
+
+      - name: Dir Check
         run: |
-          echo "::set-output name=CONFIG_DIRECTORY::templates/rds"
-          echo "::set-output name=TF_WORKSPACE::aws-utils-rds"
-          
-      - name: VPC dir check
-        if: startsWith(github.event_path, 'templates/vpc')
-        run: |
-          echo "::set-output name=CONFIG_DIRECTORY::templates/vpc"
-          echo "::set-output name=TF_WORKSPACE::aws-utils-vpc"
+          if [[ ${{steps.get_changed.outputs.changed}} == *"templates/rds"* ]]; then
+            echo "::set-output name=CONFIG_DIRECTORY::templates/rds"
+            echo "::set-output name=TF_WORKSPACE::aws-utils-rds"
+
+          elif [[ ${{steps.get_changed.outputs.changed}} == *"templates/vpc"* ]]; then
+            echo "::set-output name=CONFIG_DIRECTORY::templates/vpc"
+            echo "::set-output name=TF_WORKSPACE::aws-utils-vpc"
+          fi
       
       # - name: Upload Configuration
       #   uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
