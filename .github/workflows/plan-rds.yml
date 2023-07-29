@@ -24,8 +24,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: test github.event_path
-        run: echo ${{github}}
+      - name: test toJSON(github)
+        run: echo ${{toJSON(github)}}
 
       - name: RDS dir check
         if: startsWith(github.event_path, 'templates/rds')
