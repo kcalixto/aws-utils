@@ -29,18 +29,29 @@ jobs:
           foldersOnly: true
           format: json
 
-      - name: Echo
-        run: echo ${{ steps.get_changed.outputs.changed }}
 
-      - name: Dir Check
+      # echo "CONFIG_DIRECTORY=${{steps.get_changed.outputs.changed[0]}}" >> $GITHUB_OUTPUT
+      - name: dir check
         run: |
+          echo ${{steps.get_changed.outputs.changed[0]}}
+
           if [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
-            echo "::set-output name=CONFIG_DIRECTORY::templates/rds"
-            echo "::set-output name=TF_WORKSPACE::aws-utils-rds"
+            echo "CONFIG_DIRECTORY=templates/rds" >> $GITHUB_OUTPUT
+            echo "TF_WORKSPACE=aws-utils-rds" >> $GITHUB_OUTPUT
 
           elif [[ ${{steps.get_changed.outputs.changed}} == *"vpc"* ]]; then
-            echo "::set-output name=CONFIG_DIRECTORY::templates/vpc"
-            echo "::set-output name=TF_WORKSPACE::aws-utils-vpc"
+            echo "CONFIG_DIRECTORY=vpc" >> $GITHUB_OUTPUT
+            echo "TF_WORKSPACE=aws-utils-vpc" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: env check
+        run: |
+          if [[${{ env.CONFIG_DIRECTORY }} == "null" || ${{ env.TF_WORKSPACE }} == "null" ]]; then
+            echo "CONFIG_DIRECTORY or TF_WORKSPACE is null"
+            echo ${{ env.CONFIG_DIRECTORY }}
+            echo ${{ env.TF_WORKSPACE }}
+
+            exit 1
           fi
       
       - name: log
