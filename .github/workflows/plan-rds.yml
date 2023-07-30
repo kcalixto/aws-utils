@@ -30,10 +30,11 @@ jobs:
           format: json
 
 
-      # echo "CONFIG_DIRECTORY=${{steps.get_changed.outputs.changed[0]}}" >> $GITHUB_OUTPUT
       - name: dir check
         run: |
+          echo "CONFIG_DIRECTORY=${{steps.get_changed.outputs.changed[0]}}" >> $GITHUB_OUTPUT
           echo ${{steps.get_changed.outputs.changed[0]}}
+          echo ${{steps.get_changed.outputs.changed[1]}}
 
           if [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
             echo "CONFIG_DIRECTORY=templates/rds" >> $GITHUB_OUTPUT
@@ -46,7 +47,7 @@ jobs:
       
       - name: env check
         run: |
-          if [[${{ env.CONFIG_DIRECTORY }} == "null" || ${{ env.TF_WORKSPACE }} == "null" ]]; then
+          if [["${{ env.CONFIG_DIRECTORY }}" == "null" || "${{ env.TF_WORKSPACE }}" == "null" ]]; then
             echo "CONFIG_DIRECTORY or TF_WORKSPACE is null"
             echo ${{ env.CONFIG_DIRECTORY }}
             echo ${{ env.TF_WORKSPACE }}
