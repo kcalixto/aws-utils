@@ -34,6 +34,7 @@ jobs:
           format: json
 
       - name: Setup Terraform vars based on updated folders
+        id: setup
         run: |
           if [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
             echo "CONFIG_DIRECTORY=rds" >> $GITHUB_ENV
@@ -42,9 +43,14 @@ jobs:
           elif [[ ${{steps.get_changed.outputs.changed}} == *"vpc"* ]]; then
             echo "CONFIG_DIRECTORY=vpc" >> $GITHUB_ENV
             echo "TF_WORKSPACE=aws-utils-vpc" >> $GITHUB_ENV
+          
+          elif [[ ${{steps.get_changed.outputs.changed}} == *".github"* ]]; then
+            echo "skip_all=true" >> $GITHUB_OUTPUT
+
           fi
       
       - name: Check Terraform vars
+        if: steps.setup.outputs.skip_all != 'true'
         run: |
           if [[ "${{ env.CONFIG_DIRECTORY }}" == "null" || "${{ env.TF_WORKSPACE }}" == "null" ]]; then
             echo "CONFIG_DIRECTORY or TF_WORKSPACE is null"
@@ -55,6 +61,7 @@ jobs:
           fi 
     
       - name: Upload Configuration
+        if: steps.setup.outputs.skip_all != 'true'
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         id: apply-upload
         with:
@@ -62,6 +69,7 @@ jobs:
           directory: ${{ env.CONFIG_DIRECTORY }}
 
       - name: Create Apply Run
+        if: steps.setup.outputs.skip_all != 'true'
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
         id: apply-run
         with:
@@ -70,7 +78,7 @@ jobs:
 
       - name: Apply
         uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
-        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
+        if: steps.setup.outputs.skip_all != 'true' && fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         id: apply
         with:
           run: ${{ steps.apply-run.outputs.run_id }}

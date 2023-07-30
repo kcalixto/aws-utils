@@ -31,6 +31,7 @@ jobs:
           format: json
 
       - name: Setup Terraform vars based on updated folders
+        id: setup
         run: |
           if [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
             echo "CONFIG_DIRECTORY=rds" >> $GITHUB_ENV
@@ -39,9 +40,14 @@ jobs:
           elif [[ ${{steps.get_changed.outputs.changed}} == *"vpc"* ]]; then
             echo "CONFIG_DIRECTORY=vpc" >> $GITHUB_ENV
             echo "TF_WORKSPACE=aws-utils-vpc" >> $GITHUB_ENV
+
+          elif [[ ${{steps.get_changed.outputs.changed}} == *".github"* ]]; then
+            echo "skip_all=true" >> $GITHUB_OUTPUT
+
           fi
       
       - name: Check Terraform vars
+        if: steps.setup.outputs.skip_all != 'true'
         run: |
           if [[ "${{ env.CONFIG_DIRECTORY }}" == "null" || "${{ env.TF_WORKSPACE }}" == "null" ]]; then
             echo "CONFIG_DIRECTORY or TF_WORKSPACE is null"
@@ -52,6 +58,7 @@ jobs:
           fi 
       
       - name: Upload Configuration
+        if: steps.setup.outputs.skip_all != 'true'
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         id: plan-upload
         with:
@@ -60,6 +67,7 @@ jobs:
           speculative: true
         
       - name: Create Plan Run
+        if: steps.setup.outputs.skip_all != 'true'
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
         id: plan-run
         with:
@@ -68,12 +76,14 @@ jobs:
           plan_only: true
 
       - name: Get Plan Output
+        if: steps.setup.outputs.skip_all != 'true'
         uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
       - name: Update PR
+        if: steps.setup.outputs.skip_all != 'true'
         uses: actions/github-script@v6
         id: plan-comment
         with:
