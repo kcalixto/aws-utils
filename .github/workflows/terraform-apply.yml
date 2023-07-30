@@ -32,7 +32,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           foldersOnly: true
           format: json
-      - run: echo "${{ steps.get_changed.outputs.changed }}"
+      - run: |
+          echo "${{ steps.get_changed.outputs.changed }}"
 
       - name: Setup Terraform vars based on updated folders
         id: setup
