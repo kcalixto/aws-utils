@@ -3,9 +3,9 @@ provider "aws" {
 }
 
 locals {
-  name = "utils"
+  name = "utils-vpc"
 
   tags = {
-    GithubRepo = "aws-utils"
+    GithubRepo = "aws-utils/templates/rds"
   }
 }

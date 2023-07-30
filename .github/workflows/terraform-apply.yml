@@ -1,0 +1,86 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'rds/**'
+      - 'vpc/**'
+
+env:
+  TF_CLOUD_ORGANIZATION: "aws-utils"
+  TF_API_TOKEN: "${{ secrets.TF_AWS_UTILS_TOKEN }}"
+  TF_WORKSPACE: "null"
+  CONFIG_DIRECTORY: "null"
+
+jobs:
+  terraform:
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Check Updated Folders
+        uses: Stockopedia/action-get-changed-files@v1
+        id: get_changed
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          foldersOnly: true
+          format: json
+      - run: echo "${{ steps.get_changed.outputs.changed }}"
+
+      - name: Setup Terraform vars based on updated folders
+        id: setup
+        run: |
+          if [[ ${{steps.get_changed.outputs.changed}} == *".github"* ]]; then
+            echo "skip_all=true" >> $GITHUB_OUTPUT
+            
+          elif [[ ${{steps.get_changed.outputs.changed}} == *"vpc"* ]]; then
+            echo "CONFIG_DIRECTORY=vpc" >> $GITHUB_ENV
+            echo "TF_WORKSPACE=aws-utils-vpc" >> $GITHUB_ENV
+            
+          elif [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
+            echo "CONFIG_DIRECTORY=rds" >> $GITHUB_ENV
+            echo "TF_WORKSPACE=aws-utils-rds" >> $GITHUB_ENV
+
+          fi
+      
+      - name: Check Terraform vars
+        if: steps.setup.outputs.skip_all != 'true'
+        run: |
+          if [[ "${{ env.CONFIG_DIRECTORY }}" == "null" || "${{ env.TF_WORKSPACE }}" == "null" ]]; then
+            echo "CONFIG_DIRECTORY or TF_WORKSPACE is null"
+            echo "CONFIG_DIRECTORY=${{ env.CONFIG_DIRECTORY }}"
+            echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}"
+
+            exit 1
+          fi 
+    
+      - name: Upload Configuration
+        if: steps.setup.outputs.skip_all != 'true'
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        id: apply-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+
+      - name: Create Apply Run
+        if: steps.setup.outputs.skip_all != 'true'
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        id: apply-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+
+      - name: Apply
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
+        if: steps.setup.outputs.skip_all != 'true' && fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
+        id: apply
+        with:
+          run: ${{ steps.apply-run.outputs.run_id }}
+          comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
