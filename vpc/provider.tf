@@ -6,6 +6,6 @@ locals {
   name = "utils-vpc"
 
   tags = {
-    GithubRepo = "aws-utils/templates/rds"
+    GithubRepo = "aws-utils/vpc"
   }
 }
