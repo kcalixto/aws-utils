@@ -30,12 +30,12 @@ jobs:
       - name: Setup Terraform vars based on updated folders
         run: |
           if [[ ${{steps.get_changed.outputs.changed}} == *"rds"* ]]; then
-            echo "CONFIG_DIRECTORY=templates/rds" >> $GITHUB_OUTPUT
-            echo "TF_WORKSPACE=aws-utils-rds" >> $GITHUB_OUTPUT
+            echo "CONFIG_DIRECTORY=rds" >> $GITHUB_ENV
+            echo "TF_WORKSPACE=aws-utils-rds" >> $GITHUB_ENV
 
           elif [[ ${{steps.get_changed.outputs.changed}} == *"vpc"* ]]; then
-            echo "CONFIG_DIRECTORY=vpc" >> $GITHUB_OUTPUT
-            echo "TF_WORKSPACE=aws-utils-vpc" >> $GITHUB_OUTPUT
+            echo "CONFIG_DIRECTORY=vpc" >> $GITHUB_ENV
+            echo "TF_WORKSPACE=aws-utils-vpc" >> $GITHUB_ENV
           fi
       
       - name: Check Terraform vars
