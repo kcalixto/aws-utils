@@ -11,7 +11,7 @@ module "db" {
 
   allocated_storage     = 20
   max_allocated_storage = 20
-  skip_final_snapshot = true
+  skip_final_snapshot   = true
 
   db_name = "mysqldb"
   port    = 3306
@@ -23,6 +23,8 @@ module "db" {
   deletion_protection         = false
   storage_encrypted           = false
   manage_master_user_password = true
+
+  publicly_accessible = true
 
   username = var.mysql_db_user
   password = var.mysql_db_pass
