@@ -7,3 +7,4 @@ variable "workspace_id" {
   type        = string
   description = "slack workspace ID"
 }
+
