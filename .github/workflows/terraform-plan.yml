@@ -45,6 +45,10 @@ jobs:
             echo "CONFIG_DIRECTORY=rds" >> $GITHUB_ENV
             echo "TF_WORKSPACE=aws-utils-rds" >> $GITHUB_ENV
 
+          elif [[ ${{steps.get_changed.outputs.changed}} == *"chatbot"* ]]; then
+            echo "CONFIG_DIRECTORY=chatbot" >> $GITHUB_ENV
+            echo "TF_WORKSPACE=aws-utils-chatbot" >> $GITHUB_ENV
+
           fi
       
       - name: Check Terraform vars
